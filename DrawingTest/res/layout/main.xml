@@ -1,0 +1,24 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+<!-- 
+    <fragment
+        android:id="@+id/objectsList"
+        android:name="org.marioceresa.drawingtest.ui.ObjectsListFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="false"
+        tools:layout="@layout/list_fragment" />
+    
+    <fragment
+        android:id="@+id/drawFragment"
+        android:name="org.marioceresa.drawingtest.ui.DrawFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="false"
+        android:layout_toRightOf="@id/objectsList"
+        tools:layout="@layout/content_layout" />
+ -->     
+</RelativeLayout>
