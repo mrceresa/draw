@@ -2,9 +2,6 @@ package org.marioceresa.drawingtest;
 
 import java.util.ArrayList;
 
-import org.marioceresa.drawingtest.ui.DrawFragment;
-
-
 
 import android.content.Context;
 import android.content.Intent;
@@ -20,6 +17,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -31,31 +29,33 @@ public class DrawingSurface extends SurfaceView implements SurfaceHolder.Callbac
 	private IBrush currentBrush;
 	private int fgColor = Color.YELLOW;
 	private Style defaultStyle = 	Paint.Style.STROKE;
-	private DrawFragment parent;
-
+	public MainActivity parent;
+	ArrayAdapter<DrawingPath> adapter;
+	
 	public DrawingSurface(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
-		init();
+		init(context);
 	}
 
 	public DrawingSurface(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		init();
+		init(context);
 	}
 
     public DrawingSurface(Context context) {
         super(context);
-        init();
+        init(context);
     }
 
     
-    private void init() {
+    private void init(Context context) {
         getHolder().addCallback(this);
         _thread = new DrawingThread(getHolder(), this);
         setFocusable(true);
         setBrush(new PenBrush());
-        currentPath =  new DrawingPath(fgColor, defaultStyle);
+        currentPath =  new DrawingPath("Poly_0", fgColor, defaultStyle);
 		setOnTouchListener(this);
+		adapter = new ArrayAdapter<DrawingPath>(context, R.layout.list_element, _graphics);
 	}
 
 	public void setFGColor(int color) {
@@ -89,7 +89,7 @@ public class DrawingSurface extends SurfaceView implements SurfaceHolder.Callbac
 
 	public void clearCanvas() {
 		synchronized (_thread.getSurfaceHolder()) {
-			_graphics.clear();
+			adapter.clear();
 		}
 		this.invalidate();
 	}
@@ -110,19 +110,18 @@ public class DrawingSurface extends SurfaceView implements SurfaceHolder.Callbac
     	boolean defaultResult = v.onTouchEvent(event);
     	
     	if(event.getAction() == MotionEvent.ACTION_DOWN){
-    		currentPath = new DrawingPath(fgColor, defaultStyle);
+    		String pName = "Poly_"+Integer.toString(_graphics.size());
+    		currentPath = new DrawingPath(pName,fgColor, defaultStyle);
     		currentBrush.mouseDown(currentPath.getPath(), event.getX(), event.getY());
         }else if(event.getAction() == MotionEvent.ACTION_MOVE){
         	currentBrush.mouseMove(currentPath.getPath(), event.getX(), event.getY());
         }else if(event.getAction() == MotionEvent.ACTION_UP){
         	currentBrush.mouseUp(currentPath.getPath(), event.getX(), event.getY());
         	synchronized (_thread.getSurfaceHolder()) {
-        	  _graphics.add(currentPath);
+        	  adapter.add(currentPath);
         	}
         	
-    		Intent i = new Intent(MainActivity.ACTION_NEW_POLY);
-    		i.putExtra("pos", "POL_"+Integer.toString(_graphics.size()));
-    		parent.getActivity().sendBroadcast(i);
+        	
 
         } else {
 
@@ -166,9 +165,7 @@ public class DrawingSurface extends SurfaceView implements SurfaceHolder.Callbac
 	}
 	
 
-	public void setOwnerFragment(DrawFragment parent) {
-		this.parent = parent;
-	}
+
 
 	class DrawingThread extends Thread {
 	        private SurfaceHolder _surfaceHolder;

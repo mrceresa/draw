@@ -10,9 +10,19 @@ public class DrawingPath {
     private IBrush brush;
     private Paint paint;
     private Path path;
+    private String name;
     
-    public DrawingPath(int fgColor, Style style) {
+    public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public DrawingPath(String pname, int fgColor, Style style) {
     	
+		 name = pname;
     	 brush = new PenBrush();
 		 paint = new Paint();
 		 paint.setDither(true);
@@ -47,6 +57,11 @@ public class DrawingPath {
 
 	public void setPath(Path path) {
 		this.path = path;
+	}
+
+	@Override
+	public String toString() {
+		return name;
 	}
  
 	

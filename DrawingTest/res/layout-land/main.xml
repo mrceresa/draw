@@ -1,25 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/LinearLayout1"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="horizontal" >
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
 
-    <fragment
-        android:id="@+id/list_fragment"
-        android:name="org.marioceresa.drawingtest.ui.ObjectsListFragment"
+    <ListView
+        android:id="@+id/listView1"
         android:layout_width="0dip"
         android:layout_height="wrap_content"
-        android:layout_weight=".20"
-        tools:layout="@layout/list_fragment" />
+        android:layout_weight="0.20" >
+
+    </ListView>
 
-    <fragment
-        android:id="@+id/content_fragment"
-        android:name="org.marioceresa.drawingtest.ui.DrawFragment"
+    <RelativeLayout
         android:layout_width="0dip"
-        android:layout_height="match_parent"
-        android:layout_weight=".80"
-        tools:layout="@layout/content_layout" />
+        android:layout_height="wrap_content"
+        android:layout_weight="0.80" >
+
+        <Button
+            android:id="@+id/btnPen"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/pen" />
+
+        <Button
+            android:id="@+id/btnRubber"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/btnPen"
+            android:text="@string/rubber" />
+
+        <Button
+            android:id="@+id/btnPoint"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/btnRubber"
+            android:text="@string/point" />
+
+        <Button
+            android:id="@+id/btnCircle"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/btnPoint"
+            android:text="@string/circle" />
+
+        <Button
+            android:id="@+id/btnRect"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/btnCircle"
+            android:text="@string/rect" />
+
+        <Button
+            android:id="@+id/btnColor"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/btnRect"
+            android:text="@string/color" />
+
+        <Button
+            android:id="@+id/btnStyle"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/btnColor"
+            android:text="@string/style" />
+
+        <Button
+            android:id="@+id/btnWidth"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/btnStyle"
+            android:text="@string/width" />
+
+        <org.marioceresa.drawingtest.DrawingSurface
+            android:id="@+id/drawingSurface"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentTop="false"
+            android:layout_below="@id/btnPen" />
+
+    </RelativeLayout>
 
 </LinearLayout>

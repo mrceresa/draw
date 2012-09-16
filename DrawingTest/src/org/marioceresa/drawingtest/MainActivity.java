@@ -2,7 +2,7 @@ package org.marioceresa.drawingtest;
 
 import java.util.ArrayList;
 
-import org.marioceresa.drawingtest.ui.ObjectsListFragment;
+
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -24,52 +24,57 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.Window;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Toast;
 
-public class MainActivity extends Activity  {
+public class MainActivity extends Activity  implements OnClickListener {
 	
-		public static final String ACTION_NEW_POLY = "drawing.NEW_POLY";
-		public static final String ACTION_CLEAR_CANVAS = "drawing.CLEAR_CANVAS";
-		public static final String ACTION_PATH_RES = "drawing.PATH_RES";
-		public static final String ACTION_PATH_CLOSE = "drawing.PATH_CLOSE";
-		
-		FragmentManager manager;
-	
+    	    	
+    	
+    	private DrawingSurface _surface;
+		private ListView _list;
+    	
+    	
+    	
 	    @Override
 	    public void onCreate(Bundle savedInstanceState) {
 	        super.onCreate(savedInstanceState);
 	        setContentView(R.layout.main);
-	        manager = getFragmentManager();
+
+	        _surface = (DrawingSurface) findViewById(R.id.drawingSurface);
+	        _list = (ListView) findViewById(R.id.listView1);
+			_list.setAdapter(_surface.adapter);
+			
+	        Button pen = (Button) findViewById(R.id.btnPen);
+	        pen.setOnClickListener(this);
+	        Button rub = (Button) findViewById(R.id.btnRubber);
+	        rub.setOnClickListener(this);
+
+
 	        
-	        
-
 	    }
 	    
-	    @Override
-	    public void onResume(){
-	    	super.onResume();
-	    	//If there isn't a 
-	    	if(findViewById(R.id.content_fragment) == null){
-	    		//registerReceiver(true);
-	    		FragmentTransaction ft = manager.beginTransaction();
-				ft.add(R.id.root, new ObjectsListFragment());
-				ft.commit();
-	    	}
-	    }
-	    
+		@Override
+		public void onClick(View v) {
+			if (v.getId() == R.id.btnPen) {
+	            _surface.setBrush(new PenBrush());
+	            _surface.setFGColor(Color.YELLOW);
+	            _surface.setPaintStyle(Paint.Style.STROKE);
+			} else if (v.getId() == R.id.btnRubber) {
+	        	CircleBrush r=new CircleBrush();
+	        	r.setWidth(50);
+	            _surface.setBrush(r);
+	            _surface.setFGColor(Color.BLACK);
+	            _surface.setPaintStyle(Paint.Style.FILL);
+				
+			} 
+			 
+			
+		}
 
-	    @Override
-	    public void onBackPressed(){
-	    	if(manager.getBackStackEntryCount() > 0){
-	    		manager.popBackStackImmediate();
-	    		//registerReceiver(true);
-	    	}
-	    	else
-	    		super.onBackPressed();
-	    }
 	    
-
 
 	    
 	    @Override
@@ -82,27 +87,23 @@ public class MainActivity extends Activity  {
 	    @Override
 	    public boolean onOptionsItemSelected(MenuItem item) {
 	        // Handle item selection
-	    	Intent i;
+	    	
 	        switch (item.getItemId()) {
 	            case R.id.new_canvas:
-	        		i = new Intent(MainActivity.ACTION_CLEAR_CANVAS);
-	        		sendBroadcast(i);
+	        		_surface.clearCanvas();
 	                return true;
 	                
 	            case R.id.reset:
-	            	i = new Intent(MainActivity.ACTION_PATH_RES);
-	        		sendBroadcast(i);
+	            	_surface.reset_current_path();
 	              
 	                return true;
 	                
 	            case R.id.close:
-	            	i = new Intent(MainActivity.ACTION_PATH_CLOSE);
-	        		sendBroadcast(i);
-	            	//_surface.close_current_path();
+	            	_surface.close_current_path();
 	                return true;
 
 	            case R.id.segment:
-	                //segmentSurface();
+	                segmentSurface();
 	                return true;
 	            
 	            default:
